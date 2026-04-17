@@ -16,7 +16,6 @@ body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: var(--text-neutral-200);
-    background-color: var(--bg-neutral-200);
 }
 img {
     max-width: 100%;
@@ -36,7 +35,7 @@ img {
     /* Base colors for dark mode */
     --clr-neutral-200: #fafdf6; /* Clear background */
     --clr-neutral-900: #0b0f05; /* Dark  background */
-    --clr-primary-700: #101832; /* Primary blue blue */
+    --clr-primary-700: #081a40; /* Primary blue blue */
 
     --accent-gold: #bb8d3f; /* Gold for CTAs and accents */
     --accent-gold-light: #d4a85c; /* Lighter gold for hover states */
@@ -47,7 +46,9 @@ img {
     /* Button colors */
     --btn-primary: var(--accent-gold); /* Gold for primary buttons */
     --btn-primary-hover: var(--accent-gold-light);
-    --btn-primary-text: var(--clr-neutral-900); /* Near-black text on gold buttons */
+    --btn-primary-text: var(
+        --clr-neutral-900
+    ); /* Near-black text on gold buttons */
     --btn-secondary: var(--bg-primary-700);
 }
 
@@ -83,6 +84,36 @@ p {
     margin-bottom: 1em;
     color: var(--text-neutral-800);
 }
+/* ============================================
+   LAYOUT
+   ============================================ */
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.card {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.card__content {
+    padding: 2rem;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px var(--shadow-color);
+    border-color: var(--accent-gold);
+}
 
 /* ============================================
    NAVIGATION
@@ -111,8 +142,11 @@ p {
 .nav-link {
     padding: 0.2rem 2rem;
     color: var(--clr-neutral-200);
-    border: 1px solid transparent;
-    transition: border 0.2s ease;
+    border: 2px solid transparent;
+    transition:
+        border 0.1s ease,
+        background 0.1s ease 80ms;
+    border-radius: 4px;
 }
 @media (max-width: 600px) {
     .nav-links {
@@ -122,7 +156,8 @@ p {
     }
 }
 .nav-link:hover {
-    border: 1px solid var(--border-color);
+    background: var(--clr-primary-700);
+    border-color: var(--border-color);
 }
 .logo-wrapper {
     display: flex;
@@ -272,6 +307,8 @@ p {
     background: var(--clr-primary-700);
     color: var(--clr-neutral-200);
 }
+.product-card {
+}
 .specs-list {
     list-style: none;
     padding-left: 0.8rem;
@@ -331,29 +368,9 @@ p {
     max-width: 600px;
     margin: 0 auto;
 }
-
-.solution-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
-}
-
 .solution-card {
-    background-color: var(--bg-neutral-900);
-    border-radius: 8px;
     padding: 2rem;
-    box-shadow: 0 4px 12px var(--shadow-color);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid var(--border-color);
 }
-
-.solution-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px var(--shadow-color);
-    border-color: var(--accent-gold);
-}
-
 .solution-icon {
     font-size: 2.5rem;
     margin-bottom: 1rem;
@@ -389,9 +406,21 @@ p {
    ============================================ */
 .final-cta {
     padding: 6rem 0;
-    background: var(--clr-primary-700);
-    color: var(--clr-neutral-200);
     display: flex;
+    color: var(--clr-neutral-200);
+    background: #0e2f73;
+    background: linear-gradient(
+        120deg,
+        rgba(14, 47, 115, 1) 0%,
+        rgba(8, 26, 64, 1) 100%
+    );
+    background: #081a40;
+    background: linear-gradient(
+        130deg,
+        rgba(8, 26, 64, 1) 20%,
+        rgba(14, 47, 115, 1) 48%,
+        rgba(8, 26, 64, 1) 80%
+    );
 }
 .cta-content {
     max-width: 700px;
