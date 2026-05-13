@@ -35,8 +35,8 @@ img {
 :root {
     /* Base colors for dark mode */
     --clr-neutral-200: #fafdf6; /* Clear background */
-    --clr-neutral-900: #0b0f05; /* Dark  background */
-    --clr-primary-700: #081a40; /* Primary blue blue */
+    --clr-neutral-900: #081a40; /* Dark  background */
+    --clr-primary-700: #030a1a; /* Primary blue blue */
 
     --accent-gold: #bb8d3f; /* Gold for CTAs and accents */
     --accent-gold-light: #d4a85c; /* Lighter gold for hover states */
@@ -141,13 +141,13 @@ p {
     list-style: none;
 }
 .nav-link {
-    padding: 0.2rem 2rem;
+    padding: 0.5rem 1.2rem;
     color: var(--clr-neutral-200);
-    border: 2px solid transparent;
-    transition:
-        border 0.1s ease,
-        background 0.1s ease 80ms;
-    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 6px;
+    position: relative;
+    transition: all 0.3s ease;
 }
 @media (max-width: 600px) {
     .nav-links {
@@ -226,7 +226,7 @@ p {
     transition: opacity ease-in-out 400ms;
 }
 .hero .container:hover .hero-visual{
-    opacity: 0;
+    opacity: 0.7;
 }
 .hero-video{
   position: absolute;
@@ -239,8 +239,11 @@ p {
   transform: translateY(-50%);
   overflow: hidden;
 }
-.hero-video video{
+.hero-video video {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.05; /* 🔥 aquí controlas todo */
 }
 .hero-content {
     flex: 1;
