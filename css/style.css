@@ -203,6 +203,7 @@ p {
     color: var(--clr-neutral-200);
     display: flex;
     min-height: 85vh;
+    overflow: hidden;
 }
 .hero .container {
     position: relative;
@@ -212,11 +213,20 @@ p {
     flex-direction: column;
     padding-block: 2rem;
     gap: 2rem;
-    background-color: var(--clr-neutral-900);
-    transition: background ease-in-out 400ms;
+    isolation: isolate;
 }
-.hero .container:hover{
-  background-color: transparent;
+.hero .container::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 30px;
+    background: linear-gradient(
+        180deg,
+        rgba(8, 26, 64, 0.88) 0%,
+        rgba(8, 26, 64, 0.7) 45%,
+        rgba(3, 10, 26, 0.92) 100%
+    );
 }
 .hero-visual {
     flex: 0.4;
@@ -231,27 +241,40 @@ p {
 .hero-video{
   position: absolute;
   display: flex;
-  z-index: -1;
-  top: 50%;
+  z-index: -2;
+  inset: 0;
   left: 0px;
   width: 100%;
+  height: 100%;
   border-radius: 30px;
-  transform: translateY(-50%);
   overflow: hidden;
 }
 .hero-video video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.05; /* 🔥 aquí controlas todo */
+  opacity: 0.28;
 }
 .hero-content {
     flex: 1;
     max-width: 600px;
+    position: relative;
+    z-index: 1;
 }
 @media (min-width: 700px) {
     .hero .container {
         flex-direction: row;
+    }
+    .hero .container::before {
+        background: linear-gradient(
+            90deg,
+            rgba(8, 26, 64, 0.92) 0%,
+            rgba(8, 26, 64, 0.78) 45%,
+            rgba(8, 26, 64, 0.58) 100%
+        );
+    }
+    .hero-video video {
+        opacity: 0.16;
     }
     .hero-content {
         padding-top: 5rem;
@@ -457,8 +480,20 @@ p {
 .final-cta .cta-button {
     display: block;
     width: fit-content;
-    margin-top: 4rem;
+    margin-top: 2.5rem;
     margin-inline: auto;
+}
+.contact-email {
+    margin-top: 2rem;
+    text-align: center;
+}
+.contact-email a {
+    color: var(--accent-gold-light);
+    font-weight: 700;
+    text-decoration: none;
+}
+.contact-email a:hover {
+    text-decoration: underline;
 }
 /* ============================================
    FOOTER
