@@ -452,6 +452,99 @@ p {
     }
 }
 /* ============================================
+   PRICE ADVANTAGE
+   ============================================ */
+.price-advantage {
+    background:
+        linear-gradient(180deg, rgba(5, 18, 45, 1) 0%, rgba(6, 17, 45, 1) 100%);
+    color: var(--clr-neutral-200);
+    padding: 6rem 0;
+    border-top: 1px solid rgba(250, 253, 246, 0.08);
+}
+.price-advantage .container {
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+}
+.price-copy {
+    max-width: 720px;
+}
+.section-tag {
+    display: inline-block;
+    margin-bottom: 0.85rem;
+    color: var(--accent-gold-light);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+.price-copy h2 {
+    font-size: clamp(2rem, 4vw, 3.75rem);
+    letter-spacing: 0;
+}
+.price-copy p {
+    max-width: 62ch;
+    font-size: 1.08rem;
+}
+.price-chart {
+    display: grid;
+    gap: 1rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(250, 253, 246, 0.1);
+    border-radius: 8px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
+        rgba(3, 10, 26, 0.62);
+    box-shadow: 0 24px 58px rgba(0, 0, 0, 0.34);
+}
+.price-row {
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    gap: 1rem;
+    align-items: center;
+}
+.price-brand {
+    color: var(--text-neutral-200);
+    font-weight: 800;
+    letter-spacing: 0.03em;
+}
+.price-bar {
+    display: block;
+    height: 18px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(250, 253, 246, 0.08);
+}
+.price-bar span {
+    display: block;
+    width: var(--bar-size);
+    height: 100%;
+    border-radius: inherit;
+    background: rgba(201, 212, 236, 0.42);
+}
+.price-row.drx .price-brand {
+    background: var(--gold-gradient);
+    background-clip: text;
+    color: transparent;
+}
+.price-row.drx .price-bar span {
+    background: var(--gold-gradient);
+    box-shadow: 0 0 22px rgba(187, 141, 63, 0.34);
+}
+@media (min-width: 860px) {
+    .price-advantage .container {
+        grid-template-columns: minmax(0, 0.95fr) minmax(420px, 1fr);
+    }
+}
+@media (max-width: 640px) {
+    .price-advantage {
+        padding: 4.5rem 0;
+    }
+    .price-row {
+        grid-template-columns: 58px 1fr;
+    }
+}
+/* ============================================
    PRODUCT SHOWCASE
    ============================================ */
 .product-showcase {
