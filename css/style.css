@@ -16,10 +16,14 @@ body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: var(--text-neutral-200);
-    background: var(--clr-neutral-900);
+    background:
+        linear-gradient(180deg, rgba(4, 14, 35, 0.8) 0%, rgba(8, 26, 64, 1) 42%, rgba(3, 10, 26, 1) 100%),
+        var(--clr-neutral-900);
+    overflow-x: hidden;
 }
 img {
     max-width: 100%;
+    display: block;
 }
 
 .container {
@@ -37,12 +41,17 @@ img {
     --clr-neutral-200: #fafdf6; /* Clear background */
     --clr-neutral-900: #081a40; /* Dark  background */
     --clr-primary-700: #030a1a; /* Primary blue blue */
+    --text-neutral-200: #f7f9ff;
+    --text-neutral-800: #c9d4ec;
+    --surface-900: rgba(4, 14, 35, 0.82);
+    --surface-border: rgba(250, 253, 246, 0.12);
 
     --accent-gold: #bb8d3f; /* Gold for CTAs and accents */
     --accent-gold-light: #d4a85c; /* Lighter gold for hover states */
 
-    --border-color: var(--clr-primary-700); /* Dark blue border */
-    --shadow-color: rgba(40, 56, 100, 0.3); /* Blue-tinted shadow */
+    --border-color: rgba(187, 141, 63, 0.16); /* Dark blue border */
+    --shadow-color: rgba(0, 0, 0, 0.34); /* Blue-tinted shadow */
+    --gold-gradient: linear-gradient(135deg, #f5d76f 0%, #bb8d3f 52%, #8b5e16 100%);
 
     /* Button colors */
     --btn-primary: var(--accent-gold); /* Gold for primary buttons */
@@ -92,16 +101,20 @@ p {
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    gap: 1.5rem;
     margin-bottom: 3rem;
 }
 
 .card {
     border-radius: 8px;
-    box-shadow: 0 4px 12px var(--shadow-color);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
+        var(--surface-900);
+    box-shadow: 0 18px 42px var(--shadow-color);
     transition:
         transform 0.3s ease,
-        box-shadow 0.3s ease;
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
     border: 1px solid var(--border-color);
     overflow: hidden;
 }
@@ -112,8 +125,8 @@ p {
 
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px var(--shadow-color);
-    border-color: var(--accent-gold);
+    box-shadow: 0 24px 58px rgba(0, 0, 0, 0.42);
+    border-color: rgba(212, 168, 92, 0.72);
 }
 
 /* ============================================
@@ -121,7 +134,9 @@ p {
    ============================================ */
 
 .navbar {
-    background-color: var(--clr-neutral-900);
+    background: rgba(8, 26, 64, 0.82);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(250, 253, 246, 0.08);
     position: sticky;
     top: -1px;
     z-index: 1000;
@@ -157,8 +172,8 @@ p {
     }
 }
 .nav-link:hover {
-    background: var(--clr-primary-700);
-    border-color: var(--border-color);
+    background: rgba(250, 253, 246, 0.08);
+    color: #ffffff;
 }
 .logo-wrapper {
     display: flex;
@@ -172,19 +187,24 @@ p {
 .logo {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--accent-gold);
+    background: var(--gold-gradient);
+    background-clip: text;
+    color: transparent;
     letter-spacing: -1px;
 }
 
 .nav-cta {
-    background-color: var(--btn-primary);
+    background: var(--gold-gradient);
     color: var(--btn-primary-text);
     padding: 0.5rem 1rem;
     border-radius: 4px;
     text-decoration: none;
     font-weight: 600;
-    transition: background-color 0.3s ease;
-    transition: opacity 0.4s ease;
+    box-shadow: 0 10px 24px rgba(187, 141, 63, 0.2);
+    transition:
+        opacity 0.4s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
     opacity: 0;
 }
 .is-stuck .nav-cta {
@@ -192,7 +212,8 @@ p {
 }
 
 .nav-cta:hover {
-    background-color: var(--btn-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 14px 30px rgba(187, 141, 63, 0.34);
 }
 
 /* ============================================
@@ -202,8 +223,9 @@ p {
 .hero {
     color: var(--clr-neutral-200);
     display: flex;
-    min-height: 85vh;
+    min-height: 88vh;
     overflow: hidden;
+    padding-top: 1rem;
 }
 .hero .container {
     position: relative;
@@ -211,7 +233,7 @@ p {
     width: 100%;
     align-items: center;
     flex-direction: column;
-    padding-block: 2rem;
+    padding-block: 3rem;
     gap: 2rem;
     isolation: isolate;
 }
@@ -227,16 +249,21 @@ p {
         rgba(8, 26, 64, 0.7) 45%,
         rgba(3, 10, 26, 0.92) 100%
     );
+    box-shadow: inset 0 0 0 1px rgba(250, 253, 246, 0.08);
 }
 .hero-visual {
     flex: 0.4;
     max-width: 200px;
     display: flex;
     align-items: flex-start;
-    transition: opacity ease-in-out 400ms;
+    filter: drop-shadow(0 30px 45px rgba(0, 0, 0, 0.45));
+    transition:
+        opacity ease-in-out 400ms,
+        transform ease-in-out 400ms;
 }
 .hero .container:hover .hero-visual{
     opacity: 0.7;
+    transform: translateY(-4px);
 }
 .hero-video{
   position: absolute;
@@ -286,79 +313,172 @@ p {
 }
 
 .hero-title {
-    font-size: 3rem;
+    font-size: clamp(3rem, 8vw, 6.25rem);
     margin-bottom: 1rem;
-    letter-spacing: -1px;
+    letter-spacing: 0;
+    text-shadow: 0 18px 38px rgba(0, 0, 0, 0.36);
 }
 
 .hero-subtitle {
     font-size: 1.25rem;
     margin-bottom: 2rem;
     line-height: 1.6;
+    max-width: 56ch;
 }
 
 .cta-button {
     display: inline-block;
-    padding: 0.75rem 1.5rem;
+    padding: 0.85rem 1.35rem;
     border-radius: 4px;
     text-decoration: none;
     font-weight: 600;
     transition: all 0.3s ease;
     cursor: pointer;
     text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .cta-primary {
-    background-color: var(--btn-primary);
+    background: var(--gold-gradient);
     color: var(--btn-primary-text);
+    box-shadow: 0 16px 30px rgba(187, 141, 63, 0.22);
 }
 
 .cta-primary:hover {
-    background-color: var(--btn-primary-hover);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(187, 141, 63, 0.2);
+    box-shadow: 0 20px 38px rgba(187, 141, 63, 0.34);
 }
 
 /* ============================================
    PROBLEM
    ============================================ */
 .problem {
-    background: var(--clr-neutral-900);
+    background:
+        linear-gradient(180deg, rgba(8, 26, 64, 0.96) 0%, rgba(5, 18, 45, 1) 100%),
+        repeating-linear-gradient(
+            90deg,
+            rgba(250, 253, 246, 0.04) 0,
+            rgba(250, 253, 246, 0.04) 1px,
+            transparent 1px,
+            transparent 84px
+        );
     color: var(--clr-neutral-200);
-    padding: 6rem 0;
+    padding: 6rem 0 7rem;
+    border-top: 1px solid rgba(250, 253, 246, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+.problem::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(120deg, transparent 0%, rgba(212, 168, 92, 0.12) 48%, transparent 70%),
+        linear-gradient(180deg, rgba(14, 47, 115, 0.28) 0%, transparent 55%);
+    pointer-events: none;
+}
+.problem .container {
+    position: relative;
+    z-index: 1;
 }
 .problem-content {
-    max-width: 800px;
+    max-width: 860px;
+    margin-inline: auto;
+    text-align: center;
+}
+.problem-content::before {
+    content: "";
+    display: block;
+    width: 76px;
+    height: 3px;
+    margin: 0 auto 1.4rem;
+    border-radius: 999px;
+    background: var(--gold-gradient);
+    box-shadow: 0 0 24px rgba(187, 141, 63, 0.28);
+}
+.problem-content h2 {
+    max-width: 760px;
+    margin-inline: auto;
+    font-size: clamp(2.25rem, 4vw, 4.4rem);
+    letter-spacing: 0;
+}
+.problem-content p {
+    max-width: 760px;
+    margin-inline: auto;
+    font-size: 1.08rem;
+}
+.problem-highlight {
+    display: inline-block;
+    margin-top: 0.8rem;
+    color: var(--accent-gold-light);
+    font-weight: 700;
 }
 .problem-stats {
-    margin-top: 4rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    margin-top: 3.5rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
     width: 100%;
 }
 .stat-card {
-    padding: 1rem 2rem;
-    /* display: flex;
-    flex-direction: column; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    padding: 1.5rem;
+    text-align: center;
+    background: rgba(250, 253, 246, 0.035);
+    border: 1px solid rgba(250, 253, 246, 0.09);
+    border-radius: 8px;
 }
 .stat-number {
-    color: var(--accent-gold);
+    background: var(--gold-gradient);
+    background-clip: text;
+    color: transparent;
     font-size: 3em;
-    margin-right: 0.2rem;
+    line-height: 1;
+    margin-right: 0;
+    margin-bottom: 0.4rem;
 }
 .stat-label {
     font-size: 1.2em;
+    line-height: 1.3;
+}
+@media (max-width: 800px) {
+    .problem-stats {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
 }
 /* ============================================
    PRODUCT SHOWCASE
    ============================================ */
 .product-showcase {
-    padding-top: 6rem;
-    background: var(--clr-primary-700);
+    padding-top: 7rem;
+    background: #06112d;
     color: var(--clr-neutral-200);
 }
-.product-card {
+.product-showcase .section-header {
+    margin-bottom: 4rem;
+}
+.product-card img {
+    width: 100%;
+    height: 430px;
+    object-fit: contain;
+    padding: 1rem 1rem 0.5rem;
+    background: linear-gradient(180deg, rgba(250, 253, 246, 0.04), rgba(250, 253, 246, 0.01));
+}
+.product-card .card__content {
+    padding: 2.25rem;
+}
+@media (max-width: 700px) {
+    .product-card img {
+        height: 340px;
+    }
+    .product-card .card__content {
+        padding: 1.75rem;
+    }
 }
 .specs-list {
     list-style: none;
@@ -366,26 +486,32 @@ p {
 }
 .specs-list li {
     display: flex;
-    padding: 1rem 0;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid rgba(250, 253, 246, 0.08);
+}
+.specs-list li:last-child {
+    border-bottom: 0;
 }
 .spec-icon {
     margin-right: 0.8rem;
+    color: var(--accent-gold);
 }
 .product-visual {
     max-width: 600px;
 }
 .product-visual img {
     border-radius: 8px;
+    box-shadow: 0 24px 56px rgba(0, 0, 0, 0.4);
 }
 .product-main {
-    padding: 4rem 0;
+    padding: 4.5rem 0 5.5rem;
 }
 @media (min-width: 700px) {
     .product-main {
         display: flex;
         align-items: flex-start;
         flex-direction: row-reverse;
-        gap: 2rem;
+        gap: 3rem;
     }
     .product-visual {
         position: sticky;
@@ -397,14 +523,21 @@ p {
    ============================================ */
 
 .solution-showcase {
-    padding: 4rem 0;
-    background-color: var(--clr-neutral-900);
+    padding: 6rem 0;
+    background:
+        linear-gradient(180deg, rgba(6, 20, 50, 1) 0%, rgba(8, 26, 64, 1) 100%);
     color: var(--clr-neutral-200);
 }
 
 .section-header {
     text-align: center;
     margin-bottom: 3rem;
+}
+.product-brand-logo {
+    width: min(340px, 74vw);
+    margin: -3.5rem auto 2.5rem;
+    opacity: 0.86;
+    filter: drop-shadow(0 20px 42px rgba(0, 0, 0, 0.42));
 }
 
 .section-header h2 {
@@ -425,8 +558,9 @@ p {
 .solution-icon {
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    color: var(--accent-gold);
+    color: var(--accent-gold-light);
     max-width: 42px;
+    filter: drop-shadow(0 8px 18px rgba(187, 141, 63, 0.18));
 }
 
 .solution-card h3 {
@@ -457,7 +591,7 @@ p {
    FINAL CTA
    ============================================ */
 .final-cta {
-    padding: 6rem 0;
+    padding: 7rem 0;
     display: flex;
     color: var(--clr-neutral-200);
     background: #0e2f73;
@@ -469,13 +603,16 @@ p {
     background: #081a40;
     background: linear-gradient(
         130deg,
-        rgba(8, 26, 64, 1) 20%,
+        rgba(3, 10, 26, 1) 0%,
         rgba(14, 47, 115, 1) 48%,
-        rgba(8, 26, 64, 1) 80%
+        rgba(3, 10, 26, 1) 100%
     );
+    border-top: 1px solid rgba(250, 253, 246, 0.08);
 }
 .cta-content {
     max-width: 700px;
+    margin-inline: auto;
+    text-align: center;
 }
 .final-cta .cta-button {
     display: block;
@@ -500,7 +637,7 @@ p {
    ============================================ */
 
 .footer {
-    background: var(--clr-neutral-900);
+    background: var(--clr-primary-700);
     color: var(--clr-neutral-200);
     padding: 3rem 0;
     text-align: center;
