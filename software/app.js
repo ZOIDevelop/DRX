@@ -61,6 +61,9 @@
       label.textContent = axis; value.textContent = format.format(preview.bounds[axis][1] - preview.bounds[axis][0]) + " mm"; box.append(label, value); $("bounds").append(box);
     }
     $("warnings").replaceChildren();
+    const safetyResponsibility = document.createElement("li");
+    safetyResponsibility.textContent = "You are responsible for the safety of people and equipment when using the generated program.";
+    $("warnings").append(safetyResponsibility);
     for (const warning of preview.warnings) {
       if (warning.startsWith("Los avances F")) continue;
       const li = document.createElement("li");
