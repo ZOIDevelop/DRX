@@ -71,7 +71,7 @@
   new MutationObserver(() => {
     if (!queued) { queued = true; queueMicrotask(() => { queued = false; apply(); }); }
   }).observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["aria-label", "placeholder", "title"] });
-  fetch("translations.json").then(response => { if (!response.ok) throw new Error("Translations unavailable"); return response.json(); }).then(data => {
+  fetch("translations.json", { cache: "no-cache" }).then(response => { if (!response.ok) throw new Error("Translations unavailable"); return response.json(); }).then(data => {
     messages = data; reverse = Object.fromEntries(Object.entries(data).map(([es, en]) => [en, es]));
     apply(); window.dispatchEvent(new Event("drx-language-change"));
   }).catch(() => { apply(); });

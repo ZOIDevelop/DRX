@@ -2,6 +2,7 @@
 from pathlib import Path
 import argparse
 import shutil
+import hashlib
 from urllib.parse import urlparse
 
 REPO=Path(__file__).resolve().parents[1]
@@ -21,6 +22,13 @@ def build(api_base):
     for name in ('drx-logo.png','DRX_favicon_x.png'):
         shutil.copy2(SOURCE/'img'/name,TARGET/'assets'/name)
     html=(TARGET/'index.html').read_text(encoding='utf8').replace('../img/','assets/')
+    # A refreshed page must use the current playback code and language dictionary.
+    for script in ('config.js','i18n.js','app.js'):
+        script_source=SOURCE/'software'/script
+        if script=='config.js':
+            continue  # This generated file only identifies the existing API origin.
+        revision=hashlib.sha256(script_source.read_bytes()).hexdigest()[:12]
+        html=html.replace(f'src="{script}"',f'src="{script}?v={revision}"')
     # Local-only administration links never appear on the public website.
     import re
     html=re.sub(r'<a id="connection-settings"[^>]*>.*?</a>','',html)
