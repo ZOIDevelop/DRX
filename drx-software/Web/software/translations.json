@@ -155,5 +155,6 @@
   "Continuar ✓": "Continue ✓",
   "DRX está preparando tu respaldo…": "DRX is preparing your backup…",
   "DRX Software usa coordenadas W. La vista previa muestra la trayectoria; no detecta colisiones del brazo.": "DRX Software uses W coordinates. This preview displays the toolpath; it does not detect robot collisions.",
-  "DRX Software · Coordenadas W": "DRX Software · W coordinates"
+  "DRX Software · Coordenadas W": "DRX Software · W coordinates",
+  "La verificación de membresía no está disponible temporalmente. Inténtalo más tarde.": "Membership verification is temporarily unavailable. Please try again later."
 }
