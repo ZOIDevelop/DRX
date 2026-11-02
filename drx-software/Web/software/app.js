@@ -155,15 +155,21 @@
         ctx.setLineDash(radius === 1900 ? [6, 5] : []); ctx.stroke();
       }
       ctx.setLineDash([]);
-      const until = Math.max(1, Math.round(this.points.length * this.fraction));
+      const progress = Math.max(0, Math.min(1, this.fraction)) * (this.points.length - 1);
+      const completed = Math.floor(progress), until = completed + 1;
+      const from = this.points[completed], to = this.points[Math.min(completed + 1, this.points.length - 1)];
+      const blend = progress - completed;
+      const cursor = from.slice(0, 3).map((value, axis) => value + (to[axis] - value) * blend);
       for (const category of ["base", "rapid", "work"]) {
         ctx.strokeStyle = category === "base" ? "#41597855" : category === "rapid" ? "#7196c5" : "#e4bb72"; ctx.lineWidth = category === "work" ? 1.4 : .85; ctx.beginPath();
         for (let i = 1; i < this.points.length; i++) {
           if (category !== "base" && (i >= until || Boolean(this.points[i][4]) !== (category === "rapid"))) continue;
           line(this.points[i - 1].slice(0, 3), this.points[i].slice(0, 3));
-        } ctx.stroke();
+        }
+        if (category !== "base" && blend > 0 && Boolean(to[4]) === (category === "rapid")) line(from.slice(0, 3), cursor);
+        ctx.stroke();
       }
-      const current = project(this.points[Math.min(until - 1, this.points.length - 1)].slice(0, 3)); ctx.fillStyle = "#f5d795"; ctx.beginPath(); ctx.arc(...current, 4, 0, Math.PI * 2); ctx.fill();
+      const current = project(cursor); ctx.fillStyle = "#f5d795"; ctx.beginPath(); ctx.arc(...current, 4, 0, Math.PI * 2); ctx.fill();
       const axes = [["X", "#e08487", [1, 0, 0]], ["Y", "#8ed3bc", [0, 1, 0]], ["Z", "#7fb3e5", [0, 0, 1]]];
       const arrow = (start, end, label, color) => {
         const dx = end[0] - start[0], dy = end[1] - start[1], length = Math.hypot(dx, dy);
@@ -186,14 +192,22 @@
       const origin = project([0, 0, 0]); ctx.fillStyle = "#c3d2e5"; ctx.fillText("0, 0, 0", origin[0] + 8, origin[1] + 16);
       $("point-label").textContent = format.format(until) + " / " + format.format(this.points.length);
     }
-    stop() { this.playing = false; $("play").textContent = "▶"; $("play").setAttribute("aria-label", "Reproducir recorrido"); }
+    stop() { this.playing = false; cancelAnimationFrame(this.playbackFrame); this.playbackFrame = null; $("play").textContent = "▶"; $("play").setAttribute("aria-label", "Reproducir recorrido"); }
     play() {
+      if (!this.points.length) return;
       if (this.playing) { this.stop(); return; }
       if (this.fraction >= 1) this.fraction = 0;
       this.playing = true; $("play").textContent = "Ⅱ"; $("play").setAttribute("aria-label", "Pausar recorrido"); let previous = performance.now();
       // New 1× is one fifth of the original speed (90 seconds for the full toolpath).
-      const frame = (now) => { if (!this.playing) return; this.fraction = Math.min(1, this.fraction + Math.min(now - previous, 100) / 90000 * Number($("play-speed").value)); previous = now; $("timeline").value = Math.max(1, Math.round(this.fraction * this.points.length)); this.requestDraw(); if (this.fraction >= 1) this.stop(); else requestAnimationFrame(frame); };
-      requestAnimationFrame(frame);
+      const frame = (now) => {
+        if (!this.playing) return;
+        const selectedSpeed = Number($("play-speed").value);
+        const speed = Number.isFinite(selectedSpeed) && selectedSpeed > 0 ? selectedSpeed : 1;
+        this.fraction = Math.min(1, this.fraction + Math.max(0, Math.min(now - previous, 100)) / 90000 * speed);
+        previous = now; $("timeline").value = 1 + this.fraction * (this.points.length - 1); this.requestDraw();
+        if (this.fraction >= 1) this.stop(); else this.playbackFrame = requestAnimationFrame(frame);
+      };
+      this.playbackFrame = requestAnimationFrame(frame);
     }
   }
   const viewer = new PathViewer($("canvas"));
@@ -235,7 +249,8 @@
     viewer.requestDraw();
   });
   $("play").addEventListener("click", () => viewer.play());
-  $("timeline").addEventListener("input", () => { viewer.stop(); viewer.fraction = Number($("timeline").value) / viewer.points.length; viewer.requestDraw(); });
+  $("timeline").step = "any";
+  $("timeline").addEventListener("input", () => { viewer.stop(); viewer.fraction = viewer.points.length > 1 ? (Number($("timeline").value) - 1) / (viewer.points.length - 1) : 1; viewer.requestDraw(); });
   $("top-view").addEventListener("click", () => { viewer.pitch = Math.PI / 2; viewer.yaw = 0; viewer.requestDraw(); $("top-view").classList.add("selected"); $("free-view").classList.remove("selected"); });
   $("free-view").addEventListener("click", () => { viewer.pitch = .9; viewer.yaw = -.65; viewer.requestDraw(); $("free-view").classList.add("selected"); $("top-view").classList.remove("selected"); });
   $("fit-view").addEventListener("click", () => { viewer.zoom = 1; viewer.requestDraw(); });
