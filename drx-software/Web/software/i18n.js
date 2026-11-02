@@ -5,6 +5,7 @@
   let messages = {}, reverse = {};
   const sources = new WeakMap(), attributes = new WeakMap();
   const patterns = [
+    [/^No se pudo confirmar el envío\. Contacta con DRX con la referencia (.+) antes de volver a intentarlo\.$/, m => `Delivery could not be confirmed. Contact DRX with reference ${m[1]} before trying again.`],
     [/^El respaldo se enviará a (.+)\. La conversión se inicia al confirmar\.$/, m => `Your backup will be sent to ${m[1]}. Conversion starts when you confirm.`],
     [/^✓ Respaldo enviado a (.+)\. Revisa también tu carpeta de spam\.$/, m => `✓ Backup sent to ${m[1]}. Please also check your spam folder.`],
     [/^El proceso sigue pendiente\. No se ha confirmado el envío; contacta con DRX con la referencia (.+)\.$/, m => `Processing is still pending. Delivery has not been confirmed; contact DRX with reference ${m[1]}.`],

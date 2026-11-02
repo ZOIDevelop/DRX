@@ -93,9 +93,9 @@
           const job = await api("/api/jobs/" + state.job, null, "GET");
           if (job.status === "sent") { $("job-status").textContent = "✓ Respaldo enviado a " + state.email + ". Revisa también tu carpeta de spam."; return; }
           if (job.status === "failed") { $("job-status").textContent = job.message || "No se pudo completar el proceso. Contacta con DRX."; return; }
-          if (job.status === "unconfirmed") { $("job-status").textContent = "El proceso sigue pendiente. No se ha confirmado el envío; contacta con DRX con la referencia " + state.job + "."; return; }
+          if (job.status === "unconfirmed") { $("job-status").textContent = "No se pudo confirmar el envío. Contacta con DRX con la referencia " + state.job + " antes de volver a intentarlo."; return; }
           if (job.status === "ready") $("job-status").textContent = "Respaldo generado. Pendiente de confirmación del envío por correo…";
-          if (Date.now() - started > 10 * 60 * 1000) { $("job-status").textContent = "El proceso sigue pendiente. No se ha confirmado el envío; contacta con DRX con la referencia " + state.job.slice(0, 8) + "."; return; }
+          if (Date.now() - started > 10 * 60 * 1000) { $("job-status").textContent = "No se pudo confirmar el envío. Contacta con DRX con la referencia " + state.job + " antes de volver a intentarlo."; return; }
           state.poll = setTimeout(poll, 4000);
         } catch (exc) { $("job-status").textContent = "No se pudo consultar el estado: " + exc.message; state.poll = setTimeout(poll, 5000); }
       };
