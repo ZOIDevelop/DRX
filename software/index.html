@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DRX Software · From file to robot</title>
+  <meta name="description" content="Upload G-code or Excel, preview its toolpath and request your DRX W backup.">
+  <link rel="icon" href="assets/DRX_favicon_x.png"><link rel="stylesheet" href="style.css">
+  <script src="config.js" defer></script><script src="i18n.js" defer></script><script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../" aria-label="DRX Software home"><img src="assets/drx-logo.png" alt="DRX logo"></a>
+    <span class="profile"><span class="status-dot"></span>W coordinates</span>
+    <nav aria-label="Steps"><ol class="steps"><li class="active" id="step1"><b>1</b><span>Upload</span></li><li id="step2"><b>2</b><span>Preview</span></li><li id="step3"><b>3</b><span>Receive</span></li></ol></nav>
+    <a class="back-link" href="./">DRX Software <span aria-hidden="true">↗</span></a>
+    <label class="language-control" data-no-translate><span class="sr-only">Language / Idioma</span><select id="language" aria-label="Language / Idioma"><option value="en">English</option><option value="es">Español</option></select></label>
+  </header>
+  <main>
+    <div class="environment" id="environment" hidden><span id="environment-message">Connect email delivery to start using DRX Software.</span> </div>
+    <div role="alert" id="error" class="error" hidden></div>
+    <section id="start" class="start">
+      <div class="intro"><p class="eyebrow">FEWER STEPS. MORE POSSIBILITIES.</p><h1>From your file<br>to your <span>DRX.</span></h1><p class="lead">Upload your toolpath, explore it in 3D and receive your backup by email.</p><div class="flow"><span>G-code or Excel</span><i>→</i><span>3D preview</span><i>→</i><span>W backup</span></div>
+        <div class="example-card"><span class="mini-icon" aria-hidden="true">◇</span><div><strong>Take a look first.</strong><p>Explore a toolpath without uploading a file.</p></div><button id="example" class="text-button">View example <span aria-hidden="true">→</span></button></div>
+        <p class="subtle intro-note">DRX Software uses W coordinates. This preview displays the toolpath; it does not detect robot collisions.</p>
+      </div>
+      <div class="upload-panel">
+        <div class="panel-heading"><span class="number">01</span><div><h2>Start with your email</h2><p>No password. You just need to be registered with DRX.</p></div></div>
+        <form id="email-form" novalidate><label for="email">Registered email</label><div class="email-row"><input type="email" id="email" autocomplete="email" placeholder="you@example.com" required maxlength="254"><button type="submit" id="verify" class="button small">Continue <span aria-hidden="true">→</span></button></div><p id="email-status" class="field-note" aria-live="polite">Your backup will only be sent to this email address.</p></form>
+        <div class="separator"></div>
+        <div id="dropzone" class="dropzone locked"><svg aria-hidden="true" viewBox="0 0 48 48" fill="none"><path d="M14 34H11a9 9 0 0 1-1-18 14 14 0 0 1 27-2 10 10 0 0 1 0 20h-3M24 37V19m-7 7 7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><h3>Your next toolpath starts here</h3><p>Drag your file here or choose one.</p><button id="choose" class="button outline" disabled>Choose file</button><input type="file" id="file" accept=".tap,.nc,.gcode,.xlsx" hidden><p class="formats">.tap · .nc · .gcode · .xlsx<br>Up to 12 MB</p></div>
+        <div class="template-line"><span>Working with XYZ positions?</span><a href="examples/drx-positions-template.xlsx" download>Download Excel template ↓</a></div>
+      </div>
+    </section>
+    <section id="review" class="review" hidden>
+      <div class="review-heading"><div><p class="eyebrow" id="preview-type">TOOLPATH PREVIEW</p><h1>See it from another angle.</h1><p id="filename" class="subtle"></p></div><button id="change-file" class="button outline">Change file</button></div>
+      <div class="workspace"><div class="visual-column"><div class="viewport"><div class="view-toolbar"><span class="view-badge">XYZ <span>· mm</span></span><div><button id="top-view" class="view-button">Top</button><button id="free-view" class="view-button selected">Orbit</button><button id="fit-view" class="view-button" aria-label="Fit toolpath to view">⛶</button></div></div><canvas id="canvas" tabindex="0" aria-label="3D toolpath preview. Drag to rotate and scroll to zoom. Use arrow keys to rotate, plus and minus to zoom."></canvas><span class="canvas-hint">Drag to rotate · Scroll to zoom</span></div>
+        <div class="playback"><button id="play" class="play-button" aria-label="Play toolpath">▶</button><input id="timeline" type="range" min="1" max="100" value="100" aria-label="Toolpath position"><span id="point-label">0 / 0</span><div class="speed-control"><button id="speed-toggle" class="speed-toggle" type="button" aria-label="Preview playback speed" aria-haspopup="listbox" aria-expanded="false" aria-controls="speed-menu"><span id="speed-label">1×</span><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div id="speed-menu" class="speed-menu" role="listbox" aria-label="Speed options" hidden><button type="button" role="option" data-speed="0.1" aria-selected="false" tabindex="-1"><span>0.1×</span><small>Fine review</small></button><button type="button" role="option" data-speed="0.25" aria-selected="false" tabindex="-1"><span>0.25×</span><small>Slow</small></button><button type="button" role="option" data-speed="0.5" aria-selected="false" tabindex="-1"><span>0.5×</span><small>Half speed</small></button><button type="button" role="option" data-speed="1" aria-selected="true" tabindex="-1"><span>1×</span><small>Normal</small></button><button type="button" role="option" data-speed="2" aria-selected="false" tabindex="-1"><span>2×</span><small>Fast</small></button><button type="button" role="option" data-speed="4" aria-selected="false" tabindex="-1"><span>4×</span><small>Faster</small></button><button type="button" role="option" data-speed="10" aria-selected="false" tabindex="-1"><span>10×</span><small>Quick scan</small></button><button type="button" role="option" data-speed="20" aria-selected="false" tabindex="-1"><span>20×</span><small>Maximum</small></button></div><select id="play-speed" hidden aria-hidden="true" tabindex="-1"><option value="0.1">0.1×</option><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option><option value="10">10×</option><option value="20">20×</option></select></div></div>
+        <div class="legend"><span><i class="gold-line"></i>Working toolpath</span><span><i class="blue-line"></i>G0 travel</span><span><i class="base-circle"></i>Base Ø 500 mm</span><span><i class="reach-circle"></i>Reach R 1,900 mm · 310° rotation · rear opening (−X)</span></div>
+      </div>
+      <aside class="summary"><p class="eyebrow">YOUR FILE AT A GLANCE</p><h2>Toolpath summary</h2><div class="metric"><span>XYZ positions</span><strong id="count">—</strong></div><div class="metric"><span>Expected backups</span><strong id="part-count">—</strong></div><div class="dimensions" id="bounds"></div><div class="profile-card"><span class="status-dot"></span><div><strong>DRX W profile</strong><p>Reference orientation and speed are preset.</p></div></div>
+        <details class="checks"><summary>Conversion conditions</summary><ul id="warnings"></ul></details><p class="error inline" id="export-issue" hidden></p>
+        <label class="consent"><input type="checkbox" id="reviewed"><span>I reviewed the toolpath and the W profile conditions.</span></label><button id="submit-job" class="button wide" disabled>Generate and email my backup <span aria-hidden="true">→</span></button><p class="delivery-note" id="delivery-note">DRX processes your file. We will confirm here once the email has been sent.</p><p class="job-status" id="job-status" role="status" aria-live="polite"></p>
+      </aside></div>
+    </section>
+  </main>
+  <footer><span><strong>DRX</strong> Automate your world.</span><span>DRX Software · W coordinates <i>·</i> © 2026 DRX. All rights reserved.</span></footer>
+</body>
+</html>

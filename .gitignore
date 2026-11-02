@@ -1,0 +1,38 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+*.pem
+*.key
+.private/
+**/.private/
+
+# Dependencies, caches and generated files
+node_modules/
+**/node_modules/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.build/
+**/.build/
+*.log
+.drx-web-data/
+*.sqlite
+*.sqlite3
+
+# Local reports
+sync-report.json
+.DS_Store
+Thumbs.db
+
+# n8n development belongs only in the OneDrive development workspace
+**/n8n/
+drx-software/Automation/
+tests/drx/Automation/
+
+drx-software/Converter/
+drx-software/Web/service/
+tests/drx/Web/
