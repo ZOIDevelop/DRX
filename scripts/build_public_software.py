@@ -22,6 +22,8 @@ def build(api_base):
     for name in ('drx-logo.png','DRX_favicon_x.png'):
         shutil.copy2(SOURCE/'img'/name,TARGET/'assets'/name)
     html=(TARGET/'index.html').read_text(encoding='utf8').replace('../img/','assets/')
+    style_revision=hashlib.sha256((SOURCE/'software/style.css').read_bytes()).hexdigest()[:12]
+    html=html.replace('href="style.css"',f'href="style.css?v={style_revision}"')
     # A refreshed page must use the current playback code and language dictionary.
     for script in ('config.js','i18n.js','app.js'):
         script_source=SOURCE/'software'/script

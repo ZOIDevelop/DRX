@@ -6,10 +6,10 @@
   const format = { format: value => new Intl.NumberFormat(window.DRX_I18N?.language === "es" ? "es-EC" : "en-US", { maximumFractionDigits: 2 }).format(value) };
   function error(message = "") { $("error").hidden = !message; $("error").textContent = message; }
   async function api(path, body, method = "POST") {
-    const response = await fetch(apiBase + path, { method, headers: { ...(body ? { "Content-Type": "application/json" } : {}), ...(state.token ? { Authorization: "Bearer " + state.token } : {}) }, body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(path === "/api/jobs" ? 125000 : 45000) });
+    const response = await fetch(apiBase + path, { method, headers: { ...(body ? { "Content-Type": "application/json" } : {}), ...(state.token ? { Authorization: "Bearer " + state.token } : {}) }, body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(path === "/api/jobs" ? 125000 : path === "/api/register" ? 60000 : 45000) });
     let payload;
     try { payload = await response.json(); } catch { throw new Error("No pudimos conectar con el servicio DRX. Inténtalo más tarde."); }
-    if (!response.ok) throw new Error(payload.error || "No se pudo completar la solicitud.");
+    if (!response.ok) throw Object.assign(new Error(payload.error || "No se pudo completar la solicitud."), { reason: payload.reason });
     return payload;
   }
   function setStep(step) {
@@ -18,17 +18,66 @@
   function canSubmit() {
     $("submit-job").disabled = !state.token || state.previewOnly || state.example || !state.preview?.exportable || !$("reviewed").checked || state.busy || Boolean(state.job);
   }
+  let membershipResult = null;
+  const membershipStates = {
+    unregistered: ["Create your DRX account", "Register below, confirm your email, then contact DRX to activate your membership."],
+    email_unverified: ["Confirm your email", "Open the confirmation link in your inbox. Check your spam folder too."],
+    account_inactive: ["Contact DRX", "Your account is inactive. Contact DRX for help with your access."],
+    membership_inactive: ["Activation pending", "DRX will activate your membership after confirming payment."],
+    membership_expired: ["Time to renew", "Contact DRX to confirm your renewal payment and restore access."],
+    membership_not_started: ["Your membership starts later", "Your membership is not active yet. Contact DRX to check its start date."]
+  };
+  function showMembership(result) {
+    membershipResult = result;
+    const card = $("membership-card"), active = result?.status === "active";
+    card.hidden = !result;
+    if (!result) return;
+    card.classList.toggle("active", active);
+    $("membership-title").textContent = active ? "Membership active" : membershipStates[result.reason][0];
+    $("membership-detail").replaceChildren();
+    if (active) {
+      if (result.plan) { const plan = document.createElement("span"); plan.textContent = result.plan === "annual" ? "Annual" : "Monthly"; $("membership-detail").append(plan, document.createElement("br")); }
+      const date = new Date(result.validUntil);
+      if (Number.isFinite(date.getTime())) {
+        const label = document.createElement("span"), time = document.createElement("time"); label.textContent = "Valid until"; time.dateTime = date.toISOString(); time.dataset.noTranslate = "";
+        time.textContent = new Intl.DateTimeFormat(window.DRX_I18N?.language === "es" ? "es-EC" : "en-US", { dateStyle: "medium", timeStyle: "short", timeZoneName: undefined }).format(date);
+        $("membership-detail").append(label, " · ", time);
+      } else $("membership-detail").textContent = "You can now upload your file.";
+    } else $("membership-detail").textContent = membershipStates[result.reason][1];
+    $("membership-contact").hidden = active || result.reason === "unregistered" || result.reason === "email_unverified";
+  }
+  window.addEventListener("drx-language-change", () => { if (membershipResult) showMembership(membershipResult); });
+  $("open-registration").addEventListener("click", () => {
+    $("registration").hidden = false; $("registration-title").focus();
+    if (!$("registration-form").elements.email.value) $("registration-form").elements.email.value = $("email").value;
+  });
+  $("close-registration").addEventListener("click", () => { $("registration").hidden = true; $("open-registration").focus(); });
+  let registering = false;
+  $("registration-form").addEventListener("submit", async event => {
+    event.preventDefault();
+    if (registering || !event.target.reportValidity()) return;
+    registering = true; $("register-submit").disabled = true; $("registration-status").textContent = "Submitting your registration…";
+    const form = new FormData(event.target), payload = Object.fromEntries(form);
+    payload.acknowledged = form.get("acknowledged") === "on"; payload.language = window.DRX_I18N?.language === "es" ? "es" : "en";
+    try {
+      await api("/api/register", payload);
+      $("registration-status").textContent = "Registration received. Check your inbox and spam folder for the next steps. Confirming your email does not activate membership; DRX confirms payment first.";
+      $("registration-form").hidden = true; $("register-submit").hidden = true;
+    } catch (exc) { $("registration-status").textContent = ["TimeoutError", "AbortError", "TypeError"].includes(exc.name) ? "Registration could not be confirmed. Check your inbox or contact DRX before trying again." : exc.message; $("register-submit").disabled = false; }
+    finally { registering = false; }
+  });
   $("email-form").addEventListener("submit", async (event) => {
-    event.preventDefault(); error();
+    event.preventDefault(); error(); showMembership(null);
     if (!$("email").checkValidity()) { error("Escribe un correo válido."); return; }
     $("verify").disabled = true; $("verify").textContent = "Comprobando…";
     try {
       const result = await api("/api/check-email", { email: $("email").value });
       state.token = result.token; state.email = result.email; state.previewOnly = result.previewOnly === true;
+      if (result.membership) showMembership(result.membership);
       $("email-status").textContent = state.previewOnly ? "You can preview your file. Email delivery will be available soon." : "Correo registrado. Ya puedes cargar tu archivo.";
       $("email-status").classList.add("success"); $("choose").disabled = false; $("dropzone").classList.remove("locked");
       $("email").disabled = true; $("verify").textContent = state.previewOnly ? "Continue ✓" : "Verificado ✓";
-    } catch (exc) { error(exc.message); $("verify").disabled = false; $("verify").textContent = "Continuar →"; }
+    } catch (exc) { if (Object.hasOwn(membershipStates, exc.reason)) showMembership({ reason: exc.reason }); else error(exc.message); $("verify").disabled = false; $("verify").textContent = "Continuar →"; }
   });
   $("choose").addEventListener("click", () => $("file").click());
   $("file").addEventListener("change", () => { if ($("file").files[0]) loadFile($("file").files[0]); });

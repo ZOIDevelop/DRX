@@ -26,6 +26,27 @@
       <div class="upload-panel">
         <div class="panel-heading"><span class="number">01</span><div><h2>Start with your email</h2><p>No password. You just need to be registered with DRX.</p></div></div>
         <form id="email-form" novalidate><label for="email">Registered email</label><div class="email-row"><input type="email" id="email" autocomplete="email" placeholder="you@example.com" required maxlength="254"><button type="submit" id="verify" class="button small">Continue <span aria-hidden="true">→</span></button></div><p id="email-status" class="field-note" aria-live="polite">Your backup will only be sent to this email address.</p></form>
+        <div class="membership-card" id="membership-card" hidden aria-live="polite"><strong id="membership-title"></strong><p id="membership-detail"></p><a id="membership-contact" href="https://wa.me/17866532671" target="_blank" rel="noopener noreferrer" hidden>Contact DRX →</a></div>
+        <div class="membership-actions"><span>New to DRX?</span><button id="open-registration" type="button" class="text-button">Create your account →</button></div>
+        <section id="registration" class="registration" hidden aria-labelledby="registration-title">
+          <h2 id="registration-title" tabindex="-1">Register with DRX</h2><p class="subtle">Choose monthly or annual membership. DRX confirms payment and activates your access manually. No automatic charges.</p>
+          <form id="registration-form">
+            <div class="registration-grid">
+              <label>First name<input name="firstName" autocomplete="given-name" required maxlength="120"></label>
+              <label>Last name<input name="lastName" autocomplete="family-name" required maxlength="120"></label>
+              <label class="full">Email<input name="email" type="email" autocomplete="email" required maxlength="254"></label>
+              <label class="full">Requested membership<select name="plan" required><option value="monthly">Monthly</option><option value="annual">Annual</option></select></label>
+            </div>
+            <details class="registration-extra"><summary>Company and robot details (optional)</summary><div class="registration-grid">
+              <label>Company<input name="company" autocomplete="organization" maxlength="240"></label><label>Country<input name="country" autocomplete="country-name" maxlength="120"></label>
+              <label>Phone / WhatsApp<input name="phone" type="tel" autocomplete="tel" maxlength="80"></label><label>Industry<input name="industry" maxlength="120"></label>
+              <label class="full">Robot model<input name="robotModel" maxlength="120"></label><label class="full">How will you use DRX?<textarea name="intendedUse" maxlength="500" rows="3"></textarea></label>
+            </div></details>
+            <label class="consent"><input name="acknowledged" type="checkbox" required><span>I request registration with DRX and understand that membership requires payment confirmation and manual activation.</span></label>
+          </form>
+          <div class="registration-buttons"><button class="button" id="register-submit" type="submit" form="registration-form">Register →</button><button class="button outline" id="close-registration" type="button">Back</button></div>
+          <p id="registration-status" class="field-note" role="status"></p>
+        </section>
         <div class="separator"></div>
         <div id="dropzone" class="dropzone locked"><svg aria-hidden="true" viewBox="0 0 48 48" fill="none"><path d="M14 34H11a9 9 0 0 1-1-18 14 14 0 0 1 27-2 10 10 0 0 1 0 20h-3M24 37V19m-7 7 7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><h3>Your next toolpath starts here</h3><p>Drag your file here or choose one.</p><button id="choose" class="button outline" disabled>Choose file</button><input type="file" id="file" accept=".tap,.nc,.gcode,.xlsx" hidden><p class="formats">.tap · .nc · .gcode · .xlsx<br>Up to 12 MB</p></div>
         <div class="template-line"><span>Working with XYZ positions?</span><a href="examples/drx-positions-template.xlsx" download>Download Excel template ↓</a></div>
