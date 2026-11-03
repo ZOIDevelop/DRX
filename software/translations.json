@@ -24,7 +24,6 @@
   "Correo registrado": "Registered email",
   "tu@correo.com": "you@example.com",
   "Continuar": "Continue",
-  "El respaldo se enviará únicamente a este correo.": "Your backup will only be sent to this email address.",
   "Tu próximo recorrido empieza aquí": "Your next toolpath starts here",
   "Arrastra tu archivo o selecciónalo.": "Drag your file here or choose one.",
   "Seleccionar archivo": "Choose file",
@@ -199,5 +198,6 @@
   "Es momento de renovar": "Time to renew",
   "Contacta con DRX para confirmar el pago de tu renovación y recuperar el acceso.": "Contact DRX to confirm your renewal payment and restore access.",
   "Tu membresía comienza más adelante": "Your membership starts later",
-  "Tu membresía aún no está activa. Contacta con DRX para consultar la fecha de inicio.": "Your membership is not active yet. Contact DRX to check its start date."
+  "Tu membresía aún no está activa. Contacta con DRX para consultar la fecha de inicio.": "Your membership is not active yet. Contact DRX to check its start date.",
+  "El archivo se enviará únicamente a este correo.": "Your file will only be sent to this email address."
 }

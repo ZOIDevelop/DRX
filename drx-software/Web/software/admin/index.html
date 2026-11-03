@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self' https://drx-software-service.briny-swan-7773.chatgpt.site; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; base-uri 'none'; form-action 'none'">
+<title>DRX · Staff access</title><link rel="icon" href="../../img/DRX_favicon_x.png"><link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="admin.css">
+<script src="../config.js" defer></script><script src="admin.js" defer></script>
+</head>
+<body class="staff-page">
+<header class="staff-header"><a href="../" aria-label="DRX Software"><img src="../../img/drx-logo.png" alt="DRX"></a><div><span class="staff-badge" data-i18n="Staff access">Staff access</span><select id="language" aria-label="Language / Idioma"><option value="en">English</option><option value="es">Español</option></select></div></header>
+<main class="staff-main">
+<section class="staff-card login-card" id="login-panel" aria-labelledby="login-title"><p class="eyebrow" data-i18n="DRX TEAM">DRX TEAM</p><h1 id="login-title" data-i18n="Manage memberships">Manage memberships</h1><p class="staff-description" data-i18n="Sign in with your DRX staff username and password.">Sign in with your DRX staff username and password.</p>
+<form id="staff-login"><label><span data-i18n="Username">Username</span><input name="username" autocomplete="username" required maxlength="120"></label><label><span data-i18n="Password">Password</span><input name="password" type="password" autocomplete="current-password" required maxlength="256"></label><button class="button wide" id="login-submit" type="submit" data-i18n="Sign in →">Sign in →</button></form><p id="login-status" class="staff-status" role="status" aria-live="polite"></p><a class="staff-back" href="../" data-i18n="Back to DRX Software">Back to DRX Software</a></section>
+<section class="staff-card" id="staff-panel" hidden aria-labelledby="staff-title"><div class="staff-heading"><div><p class="eyebrow" data-i18n="DRX TEAM">DRX TEAM</p><h1 id="staff-title" data-i18n="Membership approval">Membership approval</h1></div><button id="staff-logout" class="button outline" type="button" data-i18n="Sign out">Sign out</button></div><p class="staff-description" data-i18n="Use this form after DRX has confirmed payment. Registration alone does not activate access.">Use this form after DRX has confirmed payment. Registration alone does not activate access.</p>
+<form id="membership-form"><fieldset id="membership-fields"><div class="staff-grid">
+<label class="full"><span data-i18n="User email">User email</span><input name="email" type="email" autocomplete="off" required maxlength="254"></label>
+<label><span data-i18n="Operation">Operation</span><select name="operation" required><option value="" disabled selected data-i18n="Select operation">Select operation</option><option value="activate" data-i18n="Activate">Activate</option><option value="renew" data-i18n="Renew">Renew</option></select></label>
+<label><span data-i18n="Membership">Membership</span><select name="plan" required><option value="" disabled selected data-i18n="Select plan">Select plan</option><option value="monthly" data-i18n="Monthly">Monthly</option><option value="annual" data-i18n="Annual">Annual</option></select></label>
+<label class="full"><span data-i18n="Unique payment reference">Unique payment reference</span><input name="paymentReference" autocomplete="off" required maxlength="120"><small data-i18n="Use the same reference for the same payment to avoid adding a second period.">Use the same reference for the same payment to avoid adding a second period.</small></label>
+<label class="full"><span data-i18n="DRX responsible person">DRX responsible person</span><input name="confirmedBy" autocomplete="off" required maxlength="120"></label>
+<label class="full"><span data-i18n="Internal notes (optional)">Internal notes (optional)</span><textarea name="notes" rows="3" maxlength="1000"></textarea></label>
+</div><label class="consent"><input name="paymentConfirmed" type="checkbox" required><span data-i18n="DRX has verified this payment and I approve this membership operation.">DRX has verified this payment and I approve this membership operation.</span></label><button id="approve-submit" class="button wide" type="submit" data-i18n="Apply membership →">Apply membership →</button></fieldset></form><p id="approval-status" class="staff-status" role="status" aria-live="polite"></p><button id="new-operation" class="button outline" type="button" hidden data-i18n="New operation">New operation</button></section>
+</main><footer class="staff-footer">© 2026 DRX. All rights reserved.</footer>
+</body></html>

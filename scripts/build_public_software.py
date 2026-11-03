@@ -41,6 +41,15 @@ def build(api_base):
     (TARGET/'app.js').write_text(script,encoding='utf8')
     import json
     (TARGET/'config.js').write_text('window.DRX_CONFIG = Object.freeze('+json.dumps({'apiBase':api_base.rstrip('/')})+');\n',encoding='utf8')
+    (TARGET/'admin').mkdir(exist_ok=True)
+    for name in ('index.html','admin.js','admin.css'):
+        shutil.copy2(SOURCE/'software/admin'/name,TARGET/'admin'/name)
+    admin_html=(TARGET/'admin/index.html').read_text(encoding='utf8').replace('../../img/','../assets/')
+    admin_html=admin_html.replace('href="../style.css"',f'href="../style.css?v={style_revision}"')
+    for name,attribute in (('admin.js','src'),('admin.css','href')):
+        revision=hashlib.sha256((SOURCE/'software/admin'/name).read_bytes()).hexdigest()[:12]
+        admin_html=admin_html.replace(f'{attribute}="{name}"',f'{attribute}="{name}?v={revision}"')
+    (TARGET/'admin/index.html').write_text(admin_html,encoding='utf8')
     (TARGET/'examples').mkdir(exist_ok=True)
     for name in EXAMPLES:
         shutil.copy2(SOURCE/'software/examples'/name,TARGET/'examples'/name)
