@@ -121,7 +121,7 @@
     }
     $("export-issue").hidden = !preview.exportIssue; $("export-issue").textContent = preview.exportIssue || "";
     $("reviewed").checked = false; $("reviewed").disabled = example; $("job-status").textContent = "";
-    $("delivery-note").textContent = state.previewOnly && !example ? "Email delivery will be available soon. You can preview your files now." : example ? "Este ejemplo es solo una vista previa. Vuelve a Cargar para comprobar tu correo y subir tu archivo." : "El respaldo se enviará a " + state.email + ". La conversión se inicia al confirmar.";
+    $("delivery-note").textContent = state.previewOnly && !example ? "Email delivery will be available soon. You can preview your files now." : example ? "Este ejemplo es solo una vista previa. Vuelve a Cargar para comprobar tu correo y subir tu archivo." : "El archivo se enviará a " + state.email + ". La conversión se inicia al confirmar.";
     $("timeline").max = preview.count; $("timeline").value = preview.count;
     viewer.setPoints(preview.points, preview.bounds); setStep(2); canSubmit(); window.scrollTo({ top: 0, behavior: "instant" });
   }
@@ -132,18 +132,18 @@
   $("reviewed").addEventListener("change", canSubmit);
   $("submit-job").addEventListener("click", async () => {
     if (state.busy || state.job) return;
-    error(); state.busy = true; canSubmit(); $("job-status").textContent = "DRX is preparing your backup…";
+    error(); state.busy = true; canSubmit(); $("job-status").textContent = "DRX is preparing your file…";
     try {
       const result = await api("/api/jobs", { ...state.file, requestId: state.requestId, reviewed: $("reviewed").checked });
-      state.job = result.jobId; setStep(3); $("job-status").textContent = "Solicitud recibida. DRX está preparando tu respaldo…";
+      state.job = result.jobId; setStep(3); $("job-status").textContent = "Solicitud recibida. DRX está preparando tu archivo…";
       const started = Date.now();
       const poll = async () => {
         try {
           const job = await api("/api/jobs/" + state.job, null, "GET");
-          if (job.status === "sent") { $("job-status").textContent = "✓ Respaldo enviado a " + state.email + ". Revisa también tu carpeta de spam."; return; }
+          if (job.status === "sent") { $("job-status").textContent = "✓ Archivo enviado a " + state.email + ". Revisa también tu carpeta de spam."; return; }
           if (job.status === "failed") { $("job-status").textContent = job.message || "No se pudo completar el proceso. Contacta con DRX."; return; }
           if (job.status === "unconfirmed") { $("job-status").textContent = "No se pudo confirmar el envío. Contacta con DRX con la referencia " + state.job + " antes de volver a intentarlo."; return; }
-          if (job.status === "ready") $("job-status").textContent = "Respaldo generado. Pendiente de confirmación del envío por correo…";
+          if (job.status === "ready") $("job-status").textContent = "Archivo generado. Pendiente de confirmación del envío por correo…";
           if (Date.now() - started > 10 * 60 * 1000) { $("job-status").textContent = "No se pudo confirmar el envío. Contacta con DRX con la referencia " + state.job + " antes de volver a intentarlo."; return; }
           state.poll = setTimeout(poll, 4000);
         } catch (exc) { $("job-status").textContent = "No se pudo consultar el estado: " + exc.message; state.poll = setTimeout(poll, 5000); }
