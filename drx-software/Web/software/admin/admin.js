@@ -4,6 +4,7 @@
   const $ = id => document.getElementById(id), apiBase = (window.DRX_CONFIG?.apiBase || "").replace(/\/$/, "");
   let authorization = "", busy = false, logoutTimer, language = "en", status = null;
   const es = {
+    "The member must confirm their email before activation.":"El usuario debe confirmar su correo antes de activar la membresía.", "The member must register before activation.":"El usuario debe registrarse antes de activar la membresía.",
     "Staff access":"Acceso del equipo", "DRX TEAM":"EQUIPO DRX", "Manage memberships":"Administrar membresías", "Sign in with your DRX staff username and password.":"Ingresa con tu usuario y contraseña del equipo DRX.",
     "Username":"Usuario", "Password":"Contraseña", "Sign in →":"Ingresar →", "Back to DRX Software":"Volver a DRX Software", "Membership approval":"Aprobación de membresía", "Sign out":"Cerrar sesión",
     "Use this form after DRX has confirmed payment. Registration alone does not activate access.":"Usa este formulario después de que DRX haya confirmado el pago. Registrarse no activa el acceso.",
@@ -32,7 +33,7 @@
   async function api(path, payload, credential) {
     const response = await fetch(apiBase + path, { method: "POST", credentials: "omit", cache: "no-store", headers: { "Content-Type": "application/json", Authorization: credential }, body: JSON.stringify(payload), signal: AbortSignal.timeout(path.endsWith("/access") ? 25000 : 70000) });
     let data; try { data = await response.json(); } catch { throw new Error("Staff access is temporarily unavailable. Please try again later."); }
-    if (!response.ok) { const error = new Error(Object.hasOwn(es, data.error) ? data.error : "Staff access is temporarily unavailable. Please try again later."); error.status = response.status; throw error; }
+    if (!response.ok) { const error = new Error(Object.hasOwn(es, data.error) ? data.error : "Staff access is temporarily unavailable. Please try again later."); error.status = response.status; error.reason = data.reason; throw error; }
     return data;
   }
   $("language").value = language; $("language").addEventListener("change", () => { language = $("language").value === "es" ? "es" : "en"; try { localStorage.setItem("drx.language", language); } catch {} translate(); });
@@ -60,7 +61,12 @@
       message("approval-status", "Membership request processed. Check the confirmation email and internal history."); $("new-operation").hidden = false; refreshTimeout();
     } catch (error) {
       if (error.status === 401) signOut("Staff access denied. Check your username and password.");
-      else { message("approval-status", error.status === 400 ? error.message : "Approval could not be confirmed. Check the membership history before retrying with the same payment reference.", true); $("new-operation").hidden = false; }
+      else {
+        let explanation = error.status === 400 ? error.message : "Approval could not be confirmed. Check the membership history before retrying with the same payment reference.";
+        try { await api("/api/check-email", { email: payload.email }, ""); }
+        catch (memberError) { if (memberError.reason === "email_unverified") explanation = "The member must confirm their email before activation."; }
+        message("approval-status", explanation, true); $("new-operation").hidden = false;
+      }
     } finally { busy = false; }
   });
   $("new-operation").addEventListener("click", () => { $("membership-form").reset(); $("membership-fields").disabled = false; $("approval-status").textContent = ""; status = null; $("new-operation").hidden = true; $("membership-form").elements.email.focus(); });

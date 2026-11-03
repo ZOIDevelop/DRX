@@ -168,7 +168,6 @@
   "Membresía solicitada": "Requested membership",
   "Mensual": "Monthly",
   "Anual": "Annual",
-  "Datos de empresa y robot (opcionales)": "Company and robot details (optional)",
   "Empresa": "Company",
   "País": "Country",
   "Teléfono / WhatsApp": "Phone / WhatsApp",
@@ -199,5 +198,7 @@
   "Contacta con DRX para confirmar el pago de tu renovación y recuperar el acceso.": "Contact DRX to confirm your renewal payment and restore access.",
   "Tu membresía comienza más adelante": "Your membership starts later",
   "Tu membresía aún no está activa. Contacta con DRX para consultar la fecha de inicio.": "Your membership is not active yet. Contact DRX to check its start date.",
-  "El archivo se enviará únicamente a este correo.": "Your file will only be sent to this email address."
+  "El archivo se enviará únicamente a este correo.": "Your file will only be sent to this email address.",
+  "Datos de empresa y robot": "Company and robot details",
+  "Todos los campos son obligatorios.": "All fields are required."
 }

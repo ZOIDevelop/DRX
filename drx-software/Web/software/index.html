@@ -30,18 +30,19 @@
         <div class="membership-actions"><span>New to DRX?</span><button id="open-registration" type="button" class="text-button">Create your account →</button></div>
         <section id="registration" class="registration" hidden aria-labelledby="registration-title">
           <h2 id="registration-title" tabindex="-1">Register with DRX</h2><p class="subtle">Choose monthly or annual membership. DRX confirms payment and activates your access manually. No automatic charges.</p>
+          <p class="field-note">All fields are required.</p>
           <form id="registration-form">
             <div class="registration-grid">
-              <label>First name<input name="firstName" autocomplete="given-name" required maxlength="120"></label>
-              <label>Last name<input name="lastName" autocomplete="family-name" required maxlength="120"></label>
+              <label>First name<input name="firstName" autocomplete="given-name" required maxlength="100"></label>
+              <label>Last name<input name="lastName" autocomplete="family-name" required maxlength="100"></label>
               <label class="full">Email<input name="email" type="email" autocomplete="email" required maxlength="254"></label>
               <label class="full">Requested membership<select name="plan" required><option value="monthly">Monthly</option><option value="annual">Annual</option></select></label>
             </div>
-            <details class="registration-extra"><summary>Company and robot details (optional)</summary><div class="registration-grid">
-              <label>Company<input name="company" autocomplete="organization" maxlength="240"></label><label>Country<input name="country" autocomplete="country-name" maxlength="120"></label>
-              <label>Phone / WhatsApp<input name="phone" type="tel" autocomplete="tel" maxlength="80"></label><label>Industry<input name="industry" maxlength="120"></label>
-              <label class="full">Robot model<input name="robotModel" maxlength="120"></label><label class="full">How will you use DRX?<textarea name="intendedUse" maxlength="500" rows="3"></textarea></label>
-            </div></details>
+            <section class="registration-extra" aria-labelledby="registration-profile-title"><h3 id="registration-profile-title">Company and robot details</h3><div class="registration-grid">
+              <label>Company<input name="company" autocomplete="organization" maxlength="240" required></label><label>Country<input name="country" autocomplete="country-name" maxlength="100" required></label>
+              <label>Phone / WhatsApp<input name="phone" type="tel" autocomplete="tel" maxlength="60" required></label><label>Industry<input name="industry" maxlength="120" required></label>
+              <label class="full">Robot model<input name="robotModel" maxlength="120" required></label><label class="full">How will you use DRX?<textarea name="intendedUse" maxlength="500" rows="3" required></textarea></label>
+            </div></section>
             <label class="consent"><input name="acknowledged" type="checkbox" required><span>I request registration with DRX and understand that membership requires payment confirmation and manual activation.</span></label>
           </form>
           <div class="registration-buttons"><button class="button" id="register-submit" type="submit" form="registration-form">Register →</button><button class="button outline" id="close-registration" type="button">Back</button></div>
